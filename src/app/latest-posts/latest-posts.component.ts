@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BlogPost } from '../BlogPost';
 import { Input } from '@angular/core';
+import { PostService } from '../post.service';
 
 @Component({
   selector: 'app-latest-posts',
@@ -9,11 +10,12 @@ import { Input } from '@angular/core';
 })
 export class LatestPostsComponent implements OnInit {
 
-  @Input() 'posts':BlogPost[]; 
+  'posts':BlogPost[] = [];  
 
-  constructor() { }
+  constructor(private list: PostService) { }
 
   ngOnInit(): void {
+    this.list.getPosts(1, '', '').subscribe( data => this.posts = data.slice(0,3));
   }
 
 }

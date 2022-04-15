@@ -9,7 +9,7 @@ import { Input } from '@angular/core';
 })
 export class PostCardComponent implements OnInit {
 
-  @Input() 'post':BlogPost; 
+ @Input() 'post':BlogPost; 
 
   constructor() { }
 

@@ -14,4 +14,5 @@ let postSchema = new Schema({
     views: Number
 });
 
+
 module.exports = postSchema;

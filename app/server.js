@@ -32,6 +32,32 @@ app.get("/api/posts", (req,res) => {
     })
 });
 
+app.get("/api/users", (req,res) => {
+    data.getAllUsers().then((data)=>{
+        res.json(data);
+    })
+    .catch((err)=>{
+        res.json({message: `an error occurred: ${err}`});
+    })
+});
+
+app.get("/api/usernames", (req,res)=>{
+    data.getUsernames().then((data)=>{
+        res.json(data);
+    })
+    .catch((err)=>{
+        res.json({message: `an error occurred: ${err}`});
+    })
+});
+
+app.post("/api/users", (req,res)=>{
+    data.addNewUser(req.body).then((msg)=>{
+        res.json({message: msg});
+    }).catch((err)=>{
+        res.json({message: `an error occurred: ${err}`});
+    });
+});
+
 app.get("/api/categories", (req,res)=>{
     data.getCategories().then((data)=>{
         res.json(data);

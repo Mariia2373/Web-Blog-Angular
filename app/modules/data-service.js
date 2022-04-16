@@ -4,10 +4,12 @@ mongoose.Promise = global.Promise; // Added to get around the deprecation warnin
 
 // Load the schema
 const postSchema = require('./post-schema.js');
+const userSchema = require('./user-schema.js');
 
 module.exports = function(mongoDBConnectionString){
 
     let Post; // defined on connection to the new db instance
+    let User;
 
     return {
         connect: function(){
@@ -20,6 +22,7 @@ module.exports = function(mongoDBConnectionString){
         
                 db.once('open', ()=>{
                     Post = db.model("Post", postSchema);
+                    User = db.model("User", userSchema);
                     resolve();
                 });
             });
@@ -55,6 +58,43 @@ module.exports = function(mongoDBConnectionString){
                 }else{
                     reject('page and perPage query parameters must be present');
                 }
+            });
+        },
+        getAllUsers: function(){
+            return new Promise((resolve,reject)=>{       
+                        User.find().then(users=>{
+                            resolve(users)
+                        }).catch(err=>{
+                            reject(err);
+                        });
+            });
+        },
+        getUsernames: function(){
+            return new Promise((resolve,reject)=>{
+                               
+                User.find({}, '-_id username').sort().exec().then(data => {
+
+                    let usernames = data.map(user => user.username).sort();
+
+                    resolve(usernames);
+                }).catch(err => {
+                    reject(err);
+                });
+             
+            });
+        },
+        addNewUser: function(data){
+            return new Promise((resolve,reject)=>{
+                    let newUser = new User(data);
+
+                    newUser.save((err) => {
+                        if(err) {
+                            reject(err);
+                        } else {
+                            resolve(`new user: ${newUser._id} successfully added`);
+                        }
+                    });
+               
             });
         },
         getCategories: function(){
